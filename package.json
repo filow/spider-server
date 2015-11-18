@@ -15,7 +15,14 @@
   "dependencies": {
     "agentkeepalive": "^2.0.3",
     "cheerio": "^0.19.0",
+    "lodash": "^3.10.1",
     "request": "^2.65.0",
+    "require-dir": "^0.3.0",
     "superagent": "^1.4.0"
+  },
+  "devDependencies": {
+    "babel-core": "^6.1.21",
+    "babel-loader": "^6.1.0",
+    "webpack": "^1.12.6"
   }
 }
