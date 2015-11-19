@@ -1,6 +1,6 @@
 export function spaceTrim(str){
   if (str) {
-    return str.trim().replace(/[ \n\t\r\s]+/g, ' ')
+    return str.trim().replace(/\s+/g, ' ')
   } else {
     return ""
   }

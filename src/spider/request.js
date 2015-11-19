@@ -19,8 +19,8 @@ let keepaliveAgent = new Agent({
 
 
 let onerrorHandler = []
-function triggerError(code, message){
-  onerrorHandler.forEach((func) => func(code, message))
+function triggerError(err, message){
+  onerrorHandler.forEach((func) => func(err.status, message))
 }
 
 
@@ -31,6 +31,7 @@ class Request {
       .set('Accept-Encoding', header.encoding)
       .set('User-Agent', header.ua)
       .set('Referer', referer)
+      .set('Connection', 'keep-alive')
       .agent(keepaliveAgent)
       .end((err, res) => {
         // 如果发生了错误
@@ -39,15 +40,15 @@ class Request {
             // 4xx或者5xx问题
             let type = err.status / 100 | 0
             if (type == 4) {
-              triggerError(err.status, "请求失败")
+              triggerError(err, "请求失败")
             } else if (type == 5) {
-              triggerError(err.status, "服务器错误")
+              triggerError(err, "服务器错误")
             } else {
-              triggerError(err.status, "未知错误")
+              triggerError(err, "未知错误")
             }
           } else {
             // 网络问题，超时以及其他错误
-            triggerError(0, "网络错误")
+            triggerError(err, "网络错误")
           }
         } else {
           callback(res)
