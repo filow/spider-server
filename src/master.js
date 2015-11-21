@@ -5,7 +5,7 @@ spider
   .set('concurrency', 10)
   .set('maxtry', 5)
   .set('port', 6666)
-  .set('initUrl', ['http://book.douban.com/review/1587429/'])
+  .set('initUrl', ['http://www.hhu.edu.cn/'])
   .set('depth', 5)
   .start();
 

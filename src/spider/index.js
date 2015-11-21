@@ -28,29 +28,47 @@ let quene = new Quene();
 
 // 核心抓取函数
 function craw(page, cb) {
-  console.log('Calling', page);
   let { base_url, from='',depth = 0} =  page;
-  Request.get({url: base_url, referer: from}, (res) => {
-    if (res.ok) {
-      let $ = cheerio.load(res.text)
-      // 提取结果对象
-      let props = {url: base_url, referer: from, depth}
-      // 遍历分析器，把每个分析器返回的结果合并
-      analizers.forEach((func) => {
-        let result = func(base_url, $)
-        _.merge(props, result)
-      })
-      // console.log(props);
+  Request.get({url: base_url, referer: from}, (err, res) => {
+    if (err || !res.ok) {
+      let errInfo = {
+        code: err.code,
+        node: {
+          id: 'A01',
+          ip: '127.0.0.1',
+        },
+        message: err.msg,
+        time: Number(new Date())
+      }
+      page.errors.push(errInfo)
 
-      // console.log(`抓取页面 ${depth}-${props.title}-${base_url}, Content-Length: ${res.headers['content-length'] / 1000}kb`);
-      props.links.forEach((i) => {
-        quene.push({from: base_url, to: i, depth: depth+1 })
-      })
-      Store.save(props)
-      cb && cb();
+      quene.push(page)
+      // TODO： 以错误方式加入队列
+      console.log(err);
+
     } else {
-      console.error(`页面 ${depth}-${props.title}-${base_url}抓取失败`)
+      console.log(res.headers['content-type'].match(/^text/))
+      if (res.ok) {
+        let $ = cheerio.load(res.text)
+        // 提取结果对象
+        let props = {url: base_url, referer: from, depth}
+        // 遍历分析器，把每个分析器返回的结果合并
+        analizers.forEach((func) => {
+          let result = func(base_url, $)
+          _.merge(props, result)
+        })
+        // console.log(props);
+
+        // console.log(`抓取页面 ${depth}-${props.title}-${base_url}, Content-Length: ${res.headers['content-length'] / 1000}kb`);
+        props.links.forEach((i) => {
+          quene.push({from: base_url, to: i, depth: depth+1 })
+        })
+        Store.save(props)
+        cb && cb();
+      }
     }
+
+
   })
 }
 
@@ -60,7 +78,7 @@ function craw(page, cb) {
 
 // 定时运行函数
 function run() {
-  if (running_tasks < 5) {
+  if (running_tasks < options.concurrency) {
     quene.get((item) => {
       if (item) {
         console.log('找到了页面' + item.to);
@@ -74,14 +92,9 @@ function run() {
   }
 
   if (isRunning) {
-    setTimeout(run.bind(this), 500)
+    setTimeout(run.bind(this), 100)
   }
 }
-
-Request.onerror((code, message) => {
-  console.log(code, message)
-  // 将任务从active quene中放到failed quene中
-})
 
 
 let spider = {

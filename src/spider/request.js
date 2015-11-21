@@ -18,12 +18,6 @@ let keepaliveAgent = new Agent({
 });
 
 
-let onerrorHandler = []
-function triggerError(err, message){
-  onerrorHandler.forEach((func) => func(err.status, message))
-}
-
-
 class Request {
   static get(options, callback) {
     let {url, referer=''} = options;
@@ -31,6 +25,7 @@ class Request {
       .set('Accept-Encoding', header.encoding)
       .set('User-Agent', header.ua)
       .set('Referer', referer)
+      .redirects(0)
       .set('Connection', 'keep-alive')
       .agent(keepaliveAgent)
       .end((err, res) => {
@@ -39,24 +34,25 @@ class Request {
           if (err.status) {
             // 4xx或者5xx问题
             let type = err.status / 100 | 0
+            let errMsg
             if (type == 4) {
-              triggerError(err, "请求失败")
+              errMsg = "请求失败"
             } else if (type == 5) {
-              triggerError(err, "服务器错误")
+              errMsg = "服务器错误"
+            } else if (type == 3) {
+              errMsg = "跳转"
             } else {
-              triggerError(err, "未知错误")
+              errMsg = "未知错误"
             }
+            cb({code: err.status, msg: errMsg})
           } else {
             // 网络问题，超时以及其他错误
-            triggerError(err, "网络错误")
+            cb({code: err.code, msg: '网络超时或故障'})
           }
         } else {
-          callback(res)
+          callback(null, res)
         }
       });
-  }
-  static onerror(func){
-    onerrorHandler.push(func)
   }
 
 }
