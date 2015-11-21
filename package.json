@@ -16,8 +16,10 @@
   "license": "ISC",
   "dependencies": {
     "agentkeepalive": "^2.0.3",
+    "async": "^1.5.0",
     "bloom-redis": "0.0.1",
     "cheerio": "^0.19.0",
+    "express": "^4.13.3",
     "kerberos": "0.0.17",
     "lodash": "^3.10.1",
     "mongodb": "^2.0.48",
