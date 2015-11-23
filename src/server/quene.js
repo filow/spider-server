@@ -1,6 +1,7 @@
 import redis from "redis"
 import bloom from 'bloom-redis'
 import async from 'async'
+import _ from 'lodash'
 
 let client = redis.createClient();
 let queneKey = "SpiderQuene"
@@ -45,7 +46,8 @@ let quene = {
     let arr = []
     for (let i = 0; i < n; i++) {  arr.push(queneKey) }
     async.map(arr, getOne, (err, results) => {
-      cb(err, results)
+
+      cb(err, _.filter(results, (n) => n !==null) )
     });
   },
   giveBack(item) {

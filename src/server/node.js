@@ -1,7 +1,7 @@
 export default class Node {
   constructor(ip) {
     this.id = {
-      key: Math.random().toString(36).substr(6),
+      key: parseInt(Math.random()*1000000).toString(16),
       ip: ip,
       time: Number(new Date()),
     }

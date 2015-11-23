@@ -40,10 +40,10 @@ class Request {
             } else {
               errMsg = "未知错误"
             }
-            cb({code: err.status, msg: errMsg})
+            callback({code: err.status, msg: errMsg})
           } else {
             // 网络问题，超时以及其他错误
-            cb({code: err.code, msg: '网络超时或故障'})
+            callback({code: err.code, msg: '网络超时或故障'})
           }
         } else {
           callback(null, res)
