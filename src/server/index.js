@@ -33,6 +33,7 @@ app.get('/tasks', (req, res) => {
     if (workers.isRegisted(id)) {
       // 获取这个节点
       let node = workers.get(id)
+      node.refresh()
       let response = {code: 200, msg: 'ok'}
 
       // 如果客户端还有没完成的任务

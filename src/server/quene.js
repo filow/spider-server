@@ -30,10 +30,14 @@ client.on("error", function (err) {
 
 function getOne(key, cb) {
   client.lpop(key, function (err, value){
-    if (!value){
-      cb(null);
-    }else{
-      cb(err, JSON.parse(value));
+    if (err) {
+      cb(err)
+    } else {
+      if(!value) {
+        cb(null)
+      }else {
+        cb(null, JSON.parse(value))
+      }
     }
   });
 }
@@ -46,11 +50,11 @@ let regex = [
 
 function isValidUrl(url){
   for (var i = 0; i < regex.length; i++) {
-    if(!regex[i].test(url)){
-      return false;
+    if(regex[i].test(url)){
+      return true;
     }
   }
-  return true;
+  return false
 }
 
 
@@ -74,8 +78,8 @@ let quene = {
     let arr = []
     for (let i = 0; i < n; i++) {  arr.push(queneKey) }
     async.map(arr, getOne, (err, results) => {
-
-      cb(err, _.filter(results, (n) => n !==null) )
+      
+      cb(err, _.filter(results, (n) => !!n) )
     });
   },
   giveBack(item) {
@@ -101,17 +105,23 @@ function checkAndFillQuene() {
       fs.readFile(filePath, (err, gzContent) => {
         zlib.gunzip(gzContent, function (err, plainContent) {
           console.log(`已解压文件，正在处理...`)
-          let $ = cheerio.load(plainContent)
-          console.log(`文件解析完毕，开始判断链接...`)
-          $('loc').each(function (i, e) {
-            let $e = $(e)
-            let loc = $e.text()
-            let priority = parseFloat($(e).next().text())
-            if (isValidUrl(loc)) {
-              counter++
-              quene.push({loc, priority})
-            }
-          })
+          try {
+            let $ = cheerio.load(plainContent)
+            console.log(`文件解析完毕，开始判断链接...`)
+            $('loc').each(function (i, e) {
+              let $e = $(e)
+              let loc = $e.text()
+              let priority = parseFloat($(e).next().text())
+              if (isValidUrl(loc)) {
+                counter++
+                quene.push({loc, priority})
+              }
+            })
+          }catch(e) {
+            console.log('加载文件出现错误, filename: ' + filePath)
+          }
+          
+          
           console.log(`共添加了${counter}个记录`)
           
           fs.unlinkSync(filePath)

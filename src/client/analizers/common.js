@@ -4,7 +4,7 @@ import nurl from 'url'
 
 
 export default function (url, $){
-  let result = {title: '', keywords: [], links: []}
+  let result = {title: '', keywords: []}
 
   result.title = $('title').text().trim();
   // keywords
@@ -28,9 +28,6 @@ export default function (url, $){
   //     }
   //   }
   // });
-
-  $('style, script').remove()
-  result.text = spaceTrim($('body').text())
 
   return result;
 }

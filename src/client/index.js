@@ -19,8 +19,8 @@ _.each(analizersInDir, i => analizers.push(i))
 // 核心抓取函数
 function craw(page, cb) {
   if (!page) cb(null, null)
-  let { from, to, depth = 0} =  page;
-  Request.get({url: to, referer: from}, (err, res) => {
+  let { loc, priority} =  page;
+  Request.get({url: loc}, (err, res) => {
     if (err || !res.ok) {
       let errInfo = {
         code: err.code,
@@ -28,17 +28,17 @@ function craw(page, cb) {
         time: Number(new Date())
       }
       page.errors.push(errInfo)
-      page.success = true
+      page.success = false
       cb && cb(null, page)
     } else {
       if (res.ok) {
         if(res.headers['content-type'].match(/^text/)) {
           let $ = cheerio.load(res.text)
           // 提取结果对象
-          let props = {to: to, from: from, depth, success: true}
+          let props = {loc, priority, success: true}
           // 遍历分析器，把每个分析器返回的结果合并
           analizers.forEach((func) => {
-            let result = func(to, $)
+            let result = func(loc, $)
             _.merge(props, result)
           })
           props.size = parseInt(res.headers['content-length']);
@@ -63,11 +63,21 @@ export default class Spider{
   run() {
     async.forever((next) => {
       this.task.get((err, items) => {
-        async.map(items, craw, (err, results) => {
-          this.submit(results)
-          next(1)
-        })
-
+        if (err) {
+          console.log('将于5秒后重新尝试连接服务器')
+          setTimeout(() => next(null), 5000)
+        } else {
+          if (items.length <= 0) {
+            console.log("服务器目前没有待处理的项目, 将于5秒后重试")
+            setTimeout(() => next(null), 5000)
+          } else {
+            async.map(items, craw, (err, results) => {
+              this.submit(results)
+              next(1)
+            })
+          }
+        }
+        
       });
 
     }, function (err) {

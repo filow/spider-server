@@ -4,7 +4,7 @@ import quene from './quene'
 let workers = {}
 let workerNumberLimit = 5
 // 过期时间5分钟
-let workerExpire = 1000*30
+let workerExpire = 1000*60
 
 
 let workerAliveChecker = function (){

@@ -27,7 +27,8 @@ export default class {
     let url = this.getUrl('tasks', {id: this.ticket})
     request.get(url).agent(keepaliveAgent).end((err, res) => {
       if(err){
-        console.log("获取任务失败，请检查网络连接！", err)
+        console.log("获取任务失败，请检查网络连接！", err.code)
+        cb && cb(err)
       } else {
         let response = res.body;
         switch (response.code) {
@@ -40,6 +41,11 @@ export default class {
             this.getId(() => this.get(
               (err, res)=> cb(err, res)
             ))
+            break;
+          case 202:
+          // 服务器等待
+          // console.log(res)
+            cb && cb(null, [])
             break;
           default:
             cb && cb(null, response.items)
@@ -68,6 +74,7 @@ export default class {
         if (response.code == 202){
           console.log("服务器的Worker数量已满，请等待")
         }else if(response.code == 200){
+          console.log('已从服务器获得令牌: ' + response.id)
           this.ticket = response.id
           cb.call(this)
         }else {
