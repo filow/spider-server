@@ -47,8 +47,15 @@ export default class {
       }
     })
   }
-  submit() {
-
+  submit(data, cb) {
+    let url = this.getUrl('tasks')
+    request.post(url).send({data: data}).agent(keepaliveAgent).end((err, res) => {
+      if(err) {
+        console.log("向服务器提交数据失败，请检查网络连接. err: ", err)
+      }else{
+        console.log(res.body)
+      }
+    })
   }
   getId(cb){
     let url = this.getUrl('regist')

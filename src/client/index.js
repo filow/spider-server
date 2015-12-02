@@ -55,6 +55,7 @@ function craw(page, cb) {
 }
 
 
+
 export default class Spider{
   constructor(options) {
     this.task = new Connection(options.server, options.port)
@@ -63,7 +64,7 @@ export default class Spider{
     async.forever((next) => {
       this.task.get((err, items) => {
         async.map(items, craw, (err, results) => {
-          console.log(results)
+          this.submit(results)
           next(1)
         })
 
@@ -74,5 +75,8 @@ export default class Spider{
     })
 
     // run()
+  }
+  submit(data) {
+    this.task.submit(data)
   }
 }

@@ -1,10 +1,12 @@
 import express from 'express'
+import bodyParser from 'body-parser'
 import Node from './node.js'
 
 import workers from './workers'
 import quene from './quene'
-const app = express();
 
+const app = express();
+app.use(bodyParser.json())
 
 // 注册一个客户端
 app.get('/regist', (req, res) => {
@@ -62,6 +64,8 @@ app.get('/tasks', (req, res) => {
 })
 
 app.post('/tasks', (req, res) => {
+  console.log(req.body)
+  res.json(req.body)
   // // 构建白名单
   // let _ext_whiteList = ["htm", "html", "jspy", "asp", "jsp", "aspx"]
   // let ext_whiteList = {};
