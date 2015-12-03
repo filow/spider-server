@@ -1,3 +1,5 @@
+import _ from 'lodash'
+import {Store} from './store'
 export default class Node {
   constructor(ip) {
     this.id = {
@@ -32,6 +34,16 @@ export default class Node {
   setTasks(tasks) {
     this.tasks = tasks
     this.refresh()
+  }
+  finishTask(task, cb) {
+    let index = _.findIndex(this.tasks, (i) => i.loc === task.loc)
+    if (index >= 0) {
+      this.tasks.splice(index, 1)
+      Store.save(task, () => cb && cb())
+    } else {
+      cb && cb('用户提交的任务不存在')
+    }
+    
   }
   refresh() {
     this.lastActive = new Date()

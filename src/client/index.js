@@ -16,6 +16,10 @@ analizers.push(analizersInDir['common'])
 delete analizersInDir['common']
 _.each(analizersInDir, i => analizers.push(i))
 
+
+function crawShadow(page, cb) {
+  setTimeout(craw, 500, page, cb)
+}
 // 核心抓取函数
 function craw(page, cb) {
   if (!page) cb(null, null)
@@ -29,6 +33,7 @@ function craw(page, cb) {
       }
       page.errors.push(errInfo)
       page.success = false
+      console.log(`[GET] ${loc} ${err.msg}`)
       cb && cb(null, page)
     } else {
       if (res.ok) {
@@ -42,7 +47,7 @@ function craw(page, cb) {
             _.merge(props, result)
           })
           props.size = parseInt(res.headers['content-length']);
-
+          console.log(`[GET] ${loc} OK`)
           cb && cb(null, props);
         } else {
           page.success = true
@@ -71,9 +76,9 @@ export default class Spider{
             console.log("服务器目前没有待处理的项目, 将于5秒后重试")
             setTimeout(() => next(null), 5000)
           } else {
-            async.map(items, craw, (err, results) => {
-              this.submit(results)
-              next(1)
+            async.mapSeries(items, crawShadow, (err, results) => {
+              this.task.submit(results, () => next(null))
+              
             })
           }
         }
@@ -85,8 +90,5 @@ export default class Spider{
     })
 
     // run()
-  }
-  submit(data) {
-    this.task.submit(data)
   }
 }

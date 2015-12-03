@@ -1,9 +1,16 @@
 import request from 'superagent';
 import Agent from 'agentkeepalive'
 
-let header = {
-  encoding: 'gzip, deflate',
-  ua: 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/46.0.2490.80 Safari/537.36'
+let ua = [
+  "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/46.0.2490.80 Safari/537.36",
+  "BaiduSpider",
+  "Slurp",
+  "Sosospider",
+  "GoogleSpider"
+]
+
+function getUa() {
+  return ua[Math.floor( Math.random()*ua.length )]
 }
 
 let keepaliveAgent = new Agent({
@@ -18,8 +25,8 @@ class Request {
   static get(options, callback) {
     let {url, referer=''} = options;
     request.get(url)
-      .set('Accept-Encoding', header.encoding)
-      .set('User-Agent', header.ua)
+      .set('Accept-Encoding', 'gzip, deflate')
+      .set('User-Agent', getUa())
       .set('Referer', referer)
       .redirects(0)
       .set('Connection', 'keep-alive')

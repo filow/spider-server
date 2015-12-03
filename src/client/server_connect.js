@@ -54,12 +54,14 @@ export default class {
     })
   }
   submit(data, cb) {
-    let url = this.getUrl('tasks')
+    let url = this.getUrl('tasks', {id: this.ticket})
     request.post(url).send({data: data}).agent(keepaliveAgent).end((err, res) => {
       if(err) {
         console.log("向服务器提交数据失败，请检查网络连接. err: ", err)
+        cb(err)
       }else{
         console.log(res.body)
+        cb(null)
       }
     })
   }
