@@ -7,6 +7,8 @@ import path from 'path'
 import zlib from 'zlib'
 import cheerio from 'cheerio'
 
+import logger from './logger'
+
 let client = redis.createClient();
 let queneKey = "SpiderQuene"
 let siteMapDir = './tmp/sitemap'
@@ -25,7 +27,7 @@ files.forEach((f) => {
 
 
 client.on("error", function (err) {
-  console.log("Redis Error " + err);
+  logger.error('redis', err.toString())
 });
 
 function getOne(key, cb) {
@@ -60,6 +62,10 @@ function isValidUrl(url){
 
 
 let quene = {
+  repush(props) {
+    let itemString = JSON.stringify(props)
+    client.rpush(queneKey, itemString)
+  },
   push(props) {
     let { priority='', loc, errors=[] } = props
     // 判断元素是否存在

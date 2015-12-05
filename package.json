@@ -1,7 +1,7 @@
 {
-  "name": "douban-spider",
+  "name": "douban-spider-server",
   "version": "0.1.0",
-  "description": "豆瓣网分布式爬虫",
+  "description": "豆瓣网分布式爬虫--服务器版",
   "main": "index.js",
   "scripts": {
     "watch": "babel -w src -d dist",
@@ -12,21 +12,20 @@
     "spider",
     "douban"
   ],
-  "author": "LiRenhai ChenJie MaPenju",
+  "author": "LiRenhai MaPenju",
   "license": "ISC",
   "dependencies": {
-    "agentkeepalive": "^2.0.3",
     "async": "^1.5.0",
     "bloom-redis": "0.0.1",
     "body-parser": "^1.14.1",
     "cheerio": "^0.19.0",
+    "cli-color": "^1.1.0",
     "express": "^4.13.3",
     "kerberos": "0.0.17",
     "lodash": "^3.10.1",
     "mongodb": "^2.0.48",
     "redis": "^2.3.0",
     "request": "^2.65.0",
-    "require-dir": "^0.3.0",
     "superagent": "^1.4.0",
     "xml2json": "^0.9.0"
   },

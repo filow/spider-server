@@ -1,25 +1,30 @@
 import express from 'express'
 import bodyParser from 'body-parser'
-import Node from './node.js'
+import async from 'async'
 
+import Node from './node.js'
 import workers from './workers'
 import quene from './quene'
+import logger from './logger'
+
+
 const app = express();
 app.use(bodyParser.json())
 
 // 注册一个客户端
-app.get('/regist', (req, res) => {
+app.post('/regist', (req, res) => {
   let response = {}
   if (workers.canAdd()) {
     response.code = 202
     response.msg = 'wait'
-
   } else {
-    let node = new Node(req.ip)
+    let {platform, release, arch, node_version} = req.body
+    let node = new Node(req.ip, req.body)
     let id = node.id.key
     response.code = 200
     response.msg = "ok"
     response.id = id
+    logger.info("regist", `#${id}, os: ${platform} ${arch} ${release}, node_v: ${node_version}`)
     workers.add(node)
   }
 
@@ -40,18 +45,25 @@ app.get('/tasks', (req, res) => {
         response.items = node.tasks
         res.json(response)
       } else {
-        // 取得任务
-        quene.get(5, (err, items) => {
-          if (err) {
-            res.json({code: 500, msg: '服务器异常'});
-          } else if(items.length == 0) {
-            res.json({code: 202, msg: '暂时没有需要处理的任务'});
-          } else {
-            response.items = items
-            node.setTasks(items)
-            res.json(response)
-          }
-        })
+        // 节点失败几次就制裁几次
+        if(node.block > 0) {
+          node.block--
+          res.json({code: 202, msg: '暂时没有需要处理的任务'});
+        }else {
+          // 取得任务
+          quene.get(5, (err, items) => {
+            if (err) {
+              res.json({code: 500, msg: '服务器异常'});
+            } else if(items.length == 0) {
+              res.json({code: 202, msg: '暂时没有需要处理的任务'});
+            } else {
+              response.items = items
+              node.setTasks(items)
+              res.json(response)
+            }
+          })
+        }
+        
       }
 
 
@@ -70,11 +82,12 @@ app.post('/tasks', (req, res) => {
       // 获取这个节点
       let node = workers.get(id)
       let response = {code: 200, msg: 'ok'}
-      let {data} = req.body
-      
-      data.forEach((item) => {
-        node.finishTask(item)
+      let {data, stats} = req.body
+      async.map(data, node.finishTask.bind(node), function (err, result) {
+        logger.info('task', `#${id} [${result.join(', ')}]`)
       })
+      node.updateStats(stats)
+      
       res.json(response)
     }else {
       res.json({code: 401, msg: '未注册或已过期的WorkerID'});
@@ -82,9 +95,6 @@ app.post('/tasks', (req, res) => {
   } else {
     res.json({code: 400, msg: '无效请求'});
   }
-  
-
-
 })
 
 var server = app.listen(3000, function () {

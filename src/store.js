@@ -19,14 +19,16 @@ function getDbInstance(cb) {
 
       console.log(`已连接数据库服务器, Host: localhost, port: 27017, Database: Spider`);
       dbInstance = db;
-      cb(db);
+      cb && cb(db);
     });
   }
 }
 
 
 class Store {
-
+  static open() {
+    getDbInstance()
+  }
   static save(item, cb) {
     getDbInstance((db) => {
       db.collection(collection.page).insertOne(item, function(err, r) {
