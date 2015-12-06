@@ -142,40 +142,44 @@ function checkAndFillQuene() {
       (function () {
         var counter = 0;
         var mapFile = siteMapFiles.pop();
-        var filePath = _path2['default'].resolve(siteMapDir, mapFile);
-        console.log('开始从' + mapFile + '中获取url');
+        if (mapFile) {
+          (function () {
+            var filePath = _path2['default'].resolve(siteMapDir, mapFile);
+            console.log('开始从' + mapFile + '中获取url');
 
-        _fs2['default'].readFile(filePath, function (err, gzContent) {
-          _zlib2['default'].gunzip(gzContent, function (err, plainContent) {
-            console.log('已解压文件，正在处理...');
-            try {
-              (function () {
-                var $ = _cheerio2['default'].load(plainContent);
-                console.log('文件解析完毕，开始判断链接...');
-                $('loc').each(function (i, e) {
-                  var $e = $(e);
-                  var loc = $e.text();
-                  var priority = parseFloat($(e).siblings('priority').text());
-                  if (isValidUrl(loc)) {
-                    counter++;
-                    quene.push({ loc: loc, priority: priority });
-                  }
-                });
-              })();
-            } catch (e) {
-              console.log('加载文件出现错误, filename: ' + filePath);
-            }
+            _fs2['default'].readFile(filePath, function (err, gzContent) {
+              _zlib2['default'].gunzip(gzContent, function (err, plainContent) {
+                console.log('已解压文件，正在处理...');
+                try {
+                  (function () {
+                    var $ = _cheerio2['default'].load(plainContent);
+                    console.log('文件解析完毕，开始判断链接...');
+                    $('loc').each(function (i, e) {
+                      var $e = $(e);
+                      var loc = $e.text();
+                      var priority = parseFloat($(e).siblings('priority').text());
+                      if (isValidUrl(loc)) {
+                        counter++;
+                        quene.push({ loc: loc, priority: priority });
+                      }
+                    });
+                  })();
+                } catch (e) {
+                  console.log('加载文件出现错误, filename: ' + filePath);
+                }
 
-            console.log('共添加了' + counter + '个记录');
+                console.log('共添加了' + counter + '个记录');
 
-            _fs2['default'].unlinkSync(filePath);
-            if (counter < 100) {
-              setTimeout(checkAndFillQuene, 1000);
-            } else {
-              setTimeout(checkAndFillQuene, 5000);
-            }
-          });
-        });
+                _fs2['default'].unlinkSync(filePath);
+                if (counter < 100) {
+                  setTimeout(checkAndFillQuene, 1000);
+                } else {
+                  setTimeout(checkAndFillQuene, 5000);
+                }
+              });
+            });
+          })();
+        }
       })();
     } else {
       setTimeout(checkAndFillQuene, 5000);
