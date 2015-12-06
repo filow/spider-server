@@ -5,8 +5,13 @@ let color = {
   info: clc.blue,
   success: clc.green
 }
+function GetDateT(){
+  let d = new Date();
+  return `${d.getHours()}:${d.getMinutes()}:${d.getSeconds()}`
+} 
+ 
 function log(type, key, props) {
-  let arr = [color[type](`[${key.toUpperCase()}]`)].concat(props)
+  let arr = [color[info](`[${GetDateT()}]`), color[type](`[${key.toUpperCase()}]`)].concat(props)
   console.log.apply(console, arr)
 }
 export default {

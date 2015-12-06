@@ -16,8 +16,13 @@ var color = {
   info: _cliColor2['default'].blue,
   success: _cliColor2['default'].green
 };
+function GetDateT() {
+  var d = new Date();
+  return '' + d.getHours() + ':' + d.getMinutes() + ':' + d.getSeconds();
+}
+
 function log(type, key, props) {
-  var arr = [color[type]('[' + key.toUpperCase() + ']')].concat(props);
+  var arr = [color[info]('[' + GetDateT() + ']'), color[type]('[' + key.toUpperCase() + ']')].concat(props);
   console.log.apply(console, arr);
 }
 exports['default'] = {
