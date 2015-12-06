@@ -77,7 +77,7 @@ function getOne(key, cb) {
 }
 
 // 正向正则，满足条件才会通过
-var regex = [/book\.douban\.com\/subject\/\d+/, /movie\.douban\.com\/subject\/\d+/];
+var regex = [/cn.engadget.com(\/\d+){3}/];
 
 function isValidUrl(url) {
   for (var i = 0; i < regex.length; i++) {
@@ -155,7 +155,7 @@ function checkAndFillQuene() {
                 $('loc').each(function (i, e) {
                   var $e = $(e);
                   var loc = $e.text();
-                  var priority = parseFloat($(e).next().text());
+                  var priority = parseFloat($(e).siblings('priority').text());
                   if (isValidUrl(loc)) {
                     counter++;
                     quene.push({ loc: loc, priority: priority });

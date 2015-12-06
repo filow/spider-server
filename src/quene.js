@@ -46,8 +46,7 @@ function getOne(key, cb) {
 
 // 正向正则，满足条件才会通过
 let regex = [
-  /book\.douban\.com\/subject\/\d+/,
-  /movie\.douban\.com\/subject\/\d+/
+  /cn.engadget.com(\/\d+){3}/,
 ]
 
 function isValidUrl(url){
@@ -117,7 +116,7 @@ function checkAndFillQuene() {
             $('loc').each(function (i, e) {
               let $e = $(e)
               let loc = $e.text()
-              let priority = parseFloat($(e).next().text())
+              let priority = parseFloat($(e).siblings('priority').text())
               if (isValidUrl(loc)) {
                 counter++
                 quene.push({loc, priority})

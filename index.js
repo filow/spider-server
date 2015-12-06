@@ -1,7 +1,7 @@
 // 爬虫主程序文件，包含服务器部分和爬虫部分
 require('./dist')
 // var spider = require('./dist')
-// spider
+// spider 
 //   .set('maxClient', 20)
 //   .set('concurrency', 10)
 //   .set('maxtry', 5)

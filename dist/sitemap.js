@@ -30,11 +30,11 @@ var _async = require('async');
 
 var _async2 = _interopRequireDefault(_async);
 
-var sitemap_url = 'http://www.douban.com/sitemap_index.xml';
+var sitemap_url = 'http://cn.engadget.com/sitemap_index.xml';
 
 var sitemapIndexes = [];
 var header = {
-  'Host': 'www.douban.com',
+  'Host': 'cn.engadget.com',
   'User-Agent': 'BaiduSpider'
 };
 

@@ -5,12 +5,12 @@ import fs from 'fs'
 import path from 'path'
 import zlib from 'zlib'
 import async from 'async'
-let sitemap_url = 'http://www.douban.com/sitemap_index.xml'
+let sitemap_url = 'http://cn.engadget.com/sitemap_index.xml'
 
 let sitemapIndexes = []
 let header = {
-  'Host': 'www.douban.com',
-  'User-Agent': 'BaiduSpider'
+  'Host': 'cn.engadget.com',
+  'User-Agent': 'BaiduSpider',
 }
 
 getSiteMapIndex(sitemap_url, function (err, url_list) {

@@ -79,7 +79,7 @@ app.get('/tasks', function (req, res) {
             res.json({ code: 202, msg: '暂时没有需要处理的任务' });
           } else {
             // 取得任务
-            _quene2['default'].get(5, function (err, items) {
+            _quene2['default'].get(8, function (err, items) {
               if (err) {
                 res.json({ code: 500, msg: '服务器异常' });
               } else if (items.length == 0) {
