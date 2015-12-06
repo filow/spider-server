@@ -22,7 +22,7 @@ function GetDateT() {
 }
 
 function log(type, key, props) {
-  var arr = [color[info]('[' + GetDateT() + ']'), color[type]('[' + key.toUpperCase() + ']')].concat(props);
+  var arr = [color['info']('[' + GetDateT() + ']'), color[type]('[' + key.toUpperCase() + ']')].concat(props);
   console.log.apply(console, arr);
 }
 exports['default'] = {

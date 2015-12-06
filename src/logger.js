@@ -11,7 +11,7 @@ function GetDateT(){
 } 
  
 function log(type, key, props) {
-  let arr = [color[info](`[${GetDateT()}]`), color[type](`[${key.toUpperCase()}]`)].concat(props)
+  let arr = [color['info'](`[${GetDateT()}]`), color[type](`[${key.toUpperCase()}]`)].concat(props)
   console.log.apply(console, arr)
 }
 export default {
