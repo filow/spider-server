@@ -1,19 +1,20 @@
-import express from 'express'
-import bodyParser from 'body-parser'
-import async from 'async'
+import * as express from 'express'
+import * as bodyParser from 'body-parser'
+import * as async from 'async'
 
-import Node from './node.js'
+import Node from './node'
 import workers from './workers'
 import quene from './quene'
-import logger from './logger'
+import Logger from './logger'
 
-
+let logger = new Logger()
 const app = express();
 app.use(bodyParser.json())
 
+
 // 注册一个客户端
 app.post('/regist', (req, res) => {
-  let response = {}
+  let response:Response.Regist = {code: 0, msg: 'undefined'}
   if (workers.canAdd()) {
     response.code = 202
     response.msg = 'wait'
@@ -38,7 +39,7 @@ app.get('/tasks', (req, res) => {
       // 获取这个节点
       let node = workers.get(id)
       node.refresh()
-      let response = {code: 200, msg: 'ok'}
+      let response:Response.GetTask = {code: 200, msg: 'ok', items: []}
 
       // 如果客户端还有没完成的任务
       if (node.tasks.length > 0){

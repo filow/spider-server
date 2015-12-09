@@ -1,11 +1,10 @@
 {
   "name": "douban-spider-server",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "豆瓣网分布式爬虫--服务器版",
   "main": "index.js",
   "scripts": {
-    "watch": "babel -w src -d dist",
-    "mongo": "mongod --dbpath=./tmp/mongo",
+    "watch": "tsc -w",
     "redis": "redis-server redis.conf"
   },
   "keywords": [
@@ -30,8 +29,6 @@
     "xml2json": "^0.9.0"
   },
   "devDependencies": {
-    "babel-core": "^6.1.21",
-    "babel-loader": "^6.1.0",
     "webpack": "^1.12.6"
   }
 }

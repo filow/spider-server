@@ -1,14 +1,22 @@
-import _ from 'lodash'
+import * as _ from 'lodash'
 import {Store} from './store'
 import quene from './quene'
-import logger from './logger'
+import Logger from './logger'
 
+let logger = new Logger()
 Store.open()
 
 export default class Node {
-  constructor(ip, stats) {
+  public id: ClientNode.Id;
+  public os: ClientNode.OsStat;
+  public performance: ClientNode.Performance;
+  private block:number;
+  public lastActive:Date;
+  public tasks:TaskItem[];
+  
+  constructor(ip:string, stats:ClientNode.OsStat) {
     this.id = {
-      key: parseInt(Math.random()*1000000).toString(16),
+      key: Math.floor(Math.random()*1000000).toString(16),
       ip: ip,
       time: Number(new Date()),
     }
@@ -19,7 +27,7 @@ export default class Node {
         // 处理的总文档数量
         total: 0,
         // 处理成功的数量
-        successed: 0,
+        success: 0,
         // 处理失败的数量
         failed: 0,
         // 处理的文档总大小
@@ -56,7 +64,7 @@ export default class Node {
     this.performance.documents.size += task.size
     
     
-    let index = _.findIndex(this.tasks, (i) => i.loc === task.loc)
+    let index = findIndex(this.tasks, (i) => i.loc === task.loc)
     if (index >= 0) {
       this.tasks.splice(index, 1)
       // 如果成功，就把这个结果存起来，否则就退回队列
