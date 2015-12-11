@@ -1,10 +1,10 @@
-import request from 'request'
-import agent from 'superagent'
-import xml2json from 'xml2json'
-import fs from 'fs'
-import path from 'path'
-import zlib from 'zlib'
-import async from 'async'
+import * as request from 'request'
+import * as agent from 'superagent'
+import * as xml2json from 'xml2json'
+import * as fs from 'fs'
+import * as path from 'path'
+import * as zlib from 'zlib'
+import * as async from 'async'
 let sitemap_url = 'http://cn.engadget.com/sitemap_index.xml'
 
 let sitemapIndexes = []
@@ -13,10 +13,10 @@ let header = {
   'User-Agent': 'BaiduSpider',
 }
 
-getSiteMapIndex(sitemap_url, function (err, url_list) {
+getSiteMapIndex(sitemap_url, function (err, url_list:TaskItem[]) {
   if (err) { throw new Error(err)}
   
-  async.eachLimit(url_list, 5, function (i, callback){
+  async.eachLimit(url_list, 5, function (i:TaskItem, callback){
     getSiteMap(i.loc, () => callback())
      
   }, function (err) {

@@ -1,13 +1,14 @@
-import redis from "redis"
-import bloom from 'bloom-redis'
-import async from 'async'
-import _ from 'lodash'
-import fs from 'fs'
-import path from 'path'
-import zlib from 'zlib'
-import cheerio from 'cheerio'
+import * as redis from "redis"
+import * as bloom from 'bloom-redis'
+import * as async from 'async'
+import * as _ from 'lodash'
+import * as fs from 'fs'
+import * as path from 'path'
+import * as zlib from 'zlib'
+import * as cheerio from 'cheerio'
 
-import logger from './logger'
+import Logger from './logger'
+const logger = new Logger()
 
 let client = redis.createClient();
 let queneKey = "SpiderQuene"

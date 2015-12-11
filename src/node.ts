@@ -1,5 +1,5 @@
 import * as _ from 'lodash'
-import {Store} from './store'
+import Store from './store'
 import quene from './quene'
 import Logger from './logger'
 
@@ -64,7 +64,7 @@ export default class Node {
     this.performance.documents.size += task.size
     
     
-    let index = findIndex(this.tasks, (i) => i.loc === task.loc)
+    let index = _.findIndex(this.tasks, (i) => i.loc === task.loc)
     if (index >= 0) {
       this.tasks.splice(index, 1)
       // 如果成功，就把这个结果存起来，否则就退回队列

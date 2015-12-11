@@ -10,7 +10,7 @@ let collection = {
 
 let dbInstance;
 // 获取数据库实例
-function getDbInstance(cb) {
+function getDbInstance(cb?: (db: any)=>void) {
   if (dbInstance) {
     cb(dbInstance);
   } else {
@@ -37,7 +37,7 @@ class Store {
       });
     })
   }
-  static save_many(items) {
+  static save_many(items, cb) {
     getDbInstance((db) => {
       db.collection(collection.page).insertMany(items, function(err, r) {
         if(err) console.log(`数据插入错误： ${err}`)
@@ -45,7 +45,7 @@ class Store {
       });
     })
   }
-  static save_error(item) {
+  static save_error(item, cb) {
     getDbInstance((db) => {
       db.collection(collection.error).insertMany(item, function(err, r) {
         if(err) console.log(`数据插入错误： ${err}`)
@@ -57,8 +57,10 @@ class Store {
 
   }
   static close() {
-    db.close();
+    getDbInstance((db) => {
+      db.close();
+    })
   }
 
 }
-export default {Store}
+export default Store

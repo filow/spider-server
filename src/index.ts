@@ -52,7 +52,7 @@ app.get('/tasks', (req, res) => {
           res.json({code: 202, msg: '暂时没有需要处理的任务'});
         }else {
           // 取得任务
-          quene.get(8, (err, items) => {
+          quene.get(20, (err, items) => {
             if (err) {
               res.json({code: 500, msg: '服务器异常'});
             } else if(items.length == 0) {

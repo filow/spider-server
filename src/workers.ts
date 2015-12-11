@@ -1,4 +1,4 @@
-import _ from 'lodash'
+import * as _ from 'lodash'
 import quene from './quene'
 
 let workers = {}
@@ -8,7 +8,7 @@ let workerExpire = 1000*60*2
 
 
 let workerAliveChecker = function (){
-  let now = new Date()
+  let now = Date.now()
   let workerToDelete = []
   _.each(workers, (n, key) => {
     let period = now - n.lastActive

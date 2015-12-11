@@ -6,7 +6,7 @@
   "bundle": "typings/tsd.d.ts",
   "installed": {
     "node/node.d.ts": {
-      "commit": "5c3e47967affa3c4128a3875d1664ba206ae1b0f"
+      "commit": "220716d99a77df1654fb4f6cd760dc134ffa8e89"
     },
     "serve-static/serve-static.d.ts": {
       "commit": "5c3e47967affa3c4128a3875d1664ba206ae1b0f"
@@ -28,6 +28,24 @@
     },
     "cli-color/cli-color.d.ts": {
       "commit": "5c3e47967affa3c4128a3875d1664ba206ae1b0f"
+    },
+    "redis/redis.d.ts": {
+      "commit": "220716d99a77df1654fb4f6cd760dc134ffa8e89"
+    },
+    "cheerio/cheerio.d.ts": {
+      "commit": "220716d99a77df1654fb4f6cd760dc134ffa8e89"
+    },
+    "request/request.d.ts": {
+      "commit": "220716d99a77df1654fb4f6cd760dc134ffa8e89"
+    },
+    "form-data/form-data.d.ts": {
+      "commit": "220716d99a77df1654fb4f6cd760dc134ffa8e89"
+    },
+    "superagent/superagent.d.ts": {
+      "commit": "220716d99a77df1654fb4f6cd760dc134ffa8e89"
+    },
+    "mongodb/mongodb.d.ts": {
+      "commit": "220716d99a77df1654fb4f6cd760dc134ffa8e89"
     }
   }
 }
