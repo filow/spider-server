@@ -9,7 +9,7 @@ color[Level.warning] = clc.yellow;
 color[Level.error] = clc.red.bold;
 
 export default class Logger {
-  constructor(private level = Level.info) {
+  constructor(private level = Level.success) {
     
   }
   info(key:string, ...props):void {

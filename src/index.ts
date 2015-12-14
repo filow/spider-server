@@ -44,6 +44,7 @@ app.get('/tasks', (req, res) => {
       // 如果客户端还有没完成的任务
       if (node.tasks.length > 0){
         response.items = node.tasks
+        logger.info('client', `#${id}重新申请任务，获取了${node.tasks.length}个任务`)
         res.json(response)
       } else {
         // 节点失败几次就制裁几次
@@ -58,6 +59,7 @@ app.get('/tasks', (req, res) => {
             } else if(items.length == 0) {
               res.json({code: 202, msg: '暂时没有需要处理的任务'});
             } else {
+              logger.info('client', `已向#${id}分配了${items.length}个任务`)
               response.items = items
               node.setTasks(items)
               res.json(response)

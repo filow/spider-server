@@ -1,5 +1,5 @@
 // 爬虫主程序文件，包含服务器部分和爬虫部分
-require('./dist')
+require('./built')
 // var spider = require('./dist')
 // spider 
 //   .set('maxClient', 20)

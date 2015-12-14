@@ -2,7 +2,7 @@ import * as _ from 'lodash'
 import quene from './quene'
 
 let workers = {}
-let workerNumberLimit = 5
+let workerNumberLimit = 100
 // 过期时间2分钟
 let workerExpire = 1000*60*2
 
