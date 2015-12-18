@@ -4,7 +4,7 @@ import quene from './quene'
 let workers = {}
 let workerNumberLimit = 100
 // 过期时间2分钟
-let workerExpire = 1000*60*2
+let workerExpire = 1000*60*3
 
 
 let workerAliveChecker = function (){
@@ -23,8 +23,10 @@ let workerAliveChecker = function (){
     node.tasks.forEach(task => {
       quene.giveBack(task)
     })
+    global['ioInstance'] && global['ioInstance'].emit('delete node', node.id.key)
     // 删除这个节点
     delete workers[n]
+    
   })
   setTimeout(workerAliveChecker, 3000)
 }
@@ -45,6 +47,12 @@ export default {
   },
   get(key) {
     return workers[key]
+  },
+  all() {
+    return workers;
+  },
+  maxAge() {
+    return workerExpire;
   },
   isRegisted(node) {
     let key;

@@ -7,10 +7,14 @@ color[Level.success] = clc.green;
 color[Level.info] = clc.blue;
 color[Level.warning] = clc.yellow;
 color[Level.error] = clc.red.bold;
+let io_instance = null
 
 export default class Logger {
   constructor(private level = Level.success) {
     
+  }
+  setIo(io){
+    io_instance = io
   }
   info(key:string, ...props):void {
     this.log(Level.info, key, props)
@@ -29,7 +33,11 @@ export default class Logger {
       let arr = [ color[Level.info](`[${this.GetDateT()}]`), 
                 color[type](`[${key.toUpperCase()}]`) ].concat(props)
       console.log.apply(console, arr)
+      if(io_instance !== null){
+        io_instance.emit('log', { type, time: Date.now(), message: props.join(' ')});
+      }
     }
+      
   }
   private GetDateT(){
     let d = new Date();

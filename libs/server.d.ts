@@ -19,7 +19,8 @@ declare module ClientNode {
     total: number,
     success: number,
     failed: number,
-    size: number
+    size: number,
+    single_size: number
   }
   interface TimePerformance {
     crawl: number,

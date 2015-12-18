@@ -11,6 +11,10 @@
     "spider",
     "douban"
   ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/filow/spider-server.git"
+  },
   "author": "LiRenhai MaPenju",
   "license": "ISC",
   "dependencies": {
@@ -25,10 +29,9 @@
     "mongodb": "^2.0.48",
     "redis": "^2.3.0",
     "request": "^2.65.0",
+    "socket.io": "^1.3.7",
     "superagent": "^1.4.0",
     "xml2json": "^0.9.0"
   },
-  "devDependencies": {
-    "webpack": "^1.12.6"
-  }
+  "devDependencies": {}
 }

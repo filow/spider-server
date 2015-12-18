@@ -31,7 +31,8 @@ export default class Node {
         // 处理失败的数量
         failed: 0,
         // 处理的文档总大小
-        size: 0
+        size: 0,
+        single_size: 0
       },
       time: {
         // 爬取所花费的时间
@@ -56,13 +57,19 @@ export default class Node {
   }
   setTasks(tasks) {
     this.tasks = tasks
+    this.performance.time.crawl = 0
+    this.performance.documents.single_size = 0
     this.refresh()
   }
   finishTask(task, cb) {
-    this.performance.time.crawl += task.time_used
+    if (task.time_used > this.performance.time.crawl){
+      this.performance.time.crawl = task.time_used
+    }
     this.performance.documents.total += 1
     this.performance.documents.size += task.size
+    this.performance.documents.single_size += task.size
     
+    global['ioInstance'].emit('data monitor', {time: Date.now(), message: task, node_id: this.id.key})
     
     let index = _.findIndex(this.tasks, (i) => i.loc === task.loc)
     if (index >= 0) {
@@ -93,7 +100,7 @@ export default class Node {
     this.performance.memory.total = stats.memory.total
     
     this.performance.loadavg = stats.loadavg[0]
-    this.performance.time.loop += stats.total_time
+    this.performance.time.loop = stats.total_time
     
   }
   refresh() {

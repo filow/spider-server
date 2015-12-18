@@ -26,6 +26,13 @@ files.forEach((f) => {
   }
 })
 
+setInterval(()=>{
+  client.lrange(queneKey, 0, 10, function (err,value){
+   if (!err) {
+     global['ioInstance'].emit('quene stat', value)
+   } 
+  })
+}, 3000)
 
 client.on("error", function (err) {
   logger.error('redis', err.toString())
